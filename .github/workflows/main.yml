@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm" # Кешування пришвидшує встановлення залежностей
+          cache-dependency-path: "../../frontend/package-lock.json" # Вказуємо шлях до package-lock.json для правильного кешування
 
       # Крок 3: Встановлюємо залежності проєкту
       - name: Install dependencies
