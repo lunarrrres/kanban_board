@@ -1,0 +1,55 @@
+name: UniDone CI/CD Pipeline
+
+# 1. Визначаємо тригери: коли запускати пайплайн
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Назва першого етапу
+  build-and-test:
+    name: Build, Lint and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Крок 1: Копіюємо код репозиторію на віртуальну машину
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Крок 2: Встановлюємо Node.js (версія 20)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm" # Кешування пришвидшує встановлення залежностей
+
+      # Крок 3: Встановлюємо залежності проєкту
+      - name: Install dependencies
+        run: npm ci
+
+      # Крок 4: Перевірка стилю коду (Лінтер)
+      # Це важливий етап для якості: якщо є помилки в стилі, збірка впаде
+      - name: Run Linter
+        run: npm run lint
+
+      # Крок 5: Запуск Unit-тестів
+      - name: Run Tests
+        run: npm run test:unit
+
+      # Крок 6: Пробна збірка проєкту
+      # Перевіряємо, чи Vite може успішно зібрати бандл для продакшну
+      - name: Build Project
+        run: npm run build
+
+  # Другий етап (виконується тільки якщо перший пройшов успішно)
+  deploy:
+    name: Deployment Notification
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Confirm Readiness
+        run: echo "The code has passed all checks and is ready for Vercel deployment!"
