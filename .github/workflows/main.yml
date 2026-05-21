@@ -10,11 +10,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    # 1. Вказуємо шлях до папки, де безпосередньо лежить package.json
-    defaults:
-      run:
-        working-directory: ./kanban_board/frontend
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,18 +18,26 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          # 2. Шлях до лок-файлу ВІД КОРЕНЯ репозиторію
-          cache-dependency-path: "kanban_board/frontend/package-lock.json"
+          # МИ ВИДАЛИЛИ cache: 'npm' і cache-dependency-path
+          # Тепер GitHub не буде шукати лок-файл на цьому етапі
 
       - name: Install dependencies
-        run: npm ci
+        # Запускаємо звичайний install прямо в потрібній папці
+        run: |
+          cd kanban_board/frontend
+          npm install
 
       - name: Run Linter
-        run: npm run lint
+        run: |
+          cd kanban_board/frontend
+          npm run lint
 
       - name: Run Unit Tests
-        run: npm run test:unit
+        run: |
+          cd kanban_board/frontend
+          npm run test:unit
 
       - name: Build Project
-        run: npm run build
+        run: |
+          cd kanban_board/frontend
+          npm run build
