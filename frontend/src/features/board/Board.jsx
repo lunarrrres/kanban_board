@@ -156,9 +156,9 @@ const Board = () => {
                   [{mode} MODE]
                 </span>
               </div>
-              <p className="text-gray-500 font-medium">
+              {/* <p className="text-gray-500 font-medium">
                 Професійне управління вашими завданнями
-              </p>
+              </p> */}
             </div>
 
             <button
