@@ -1,6 +1,10 @@
-# Kanban Board (версія А)
+# Kanban Board 
+
+<img width="362" height="301" alt="image" src="https://github.com/user-attachments/assets/6ccb98bc-bf4f-4440-a649-5396d833a5cd" />
 
 Повнофункціональний Kanban-додаток у стилі Trello з підтримкою drag-and-drop, пошуку та фільтрації завдань. Картки можна переміщувати між колонками, додавати, редагувати та видаляти. Кожна картка має заголовок, опис, пріоритет і дату створення.
+
+Відвідати: https://kanban-board-ashy-three.vercel.app/
 
 ## Технічний стек
 
