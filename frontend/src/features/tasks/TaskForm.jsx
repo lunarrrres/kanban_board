@@ -19,6 +19,7 @@ const TaskForm = ({ task, isOpen, onClose, onSubmit, isLoading }) => {
   // Populate form when editing task
   useEffect(() => {
     if (task) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData({
         title: task.title,
         description: task.description || "",

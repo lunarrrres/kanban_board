@@ -14,18 +14,18 @@ test.describe("Головна сторінка", () => {
 
     // Перевіряємо заголовок дошки
     await expect(
-      page.getByRole("heading", { name: "Kanban Board" }),
+      page.getByRole("heading", { name: "Kanban Board" })
     ).toBeVisible();
 
     // Перевіряємо колонки через heading — уникаємо дублів у статистиці внизу
     await expect(
-      page.getByRole("heading", { name: /To Do/i }).first(),
+      page.getByRole("heading", { name: /To Do/i }).first()
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /In Progress/i }),
+      page.getByRole("heading", { name: /In Progress/i })
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /Done/i }).first(),
+      page.getByRole("heading", { name: /Done/i }).first()
     ).toBeVisible();
   });
 });
@@ -40,7 +40,7 @@ test.describe("Додавання завдання", () => {
 
     // Чекаємо поки модалка відкриється (h2 у TaskForm.jsx)
     await expect(
-      page.getByRole("heading", { name: "Нове завдання" }),
+      page.getByRole("heading", { name: "Нове завдання" })
     ).toBeVisible();
 
     // Генеруємо унікальну назву щоб уникнути дублів від попередніх запусків
@@ -57,7 +57,7 @@ test.describe("Додавання завдання", () => {
 
     // Чекаємо закриття модалки
     await expect(
-      page.getByRole("heading", { name: "Нове завдання" }),
+      page.getByRole("heading", { name: "Нове завдання" })
     ).toBeHidden();
 
     // Перевіряємо що завдання з'явилось на дошці

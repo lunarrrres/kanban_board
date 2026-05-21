@@ -3,7 +3,7 @@
  * Encapsulate API interactions and state management
  */
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   fetchTasks,
   fetchTasksFiltered,
@@ -13,7 +13,7 @@ import {
   searchTasks,
   selectLoading,
   selectError,
-} from '../redux/slices/taskSlice';
+} from "../redux/slices/taskSlice";
 
 /**
  * Hook for loading all tasks on component mount

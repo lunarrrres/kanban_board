@@ -9,12 +9,12 @@
  */
 export const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat('uk-UA', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  return new Intl.DateTimeFormat("uk-UA", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   }).format(date);
 };
 
@@ -25,11 +25,11 @@ export const formatDate = (dateString) => {
  */
 export const getPriorityColor = (priority) => {
   const colors = {
-    'Low': 'bg-blue-100 text-blue-800 border-blue-300',
-    'Medium': 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    'High': 'bg-red-100 text-red-800 border-red-300',
+    Low: "bg-blue-100 text-blue-800 border-blue-300",
+    Medium: "bg-yellow-100 text-yellow-800 border-yellow-300",
+    High: "bg-red-100 text-red-800 border-red-300",
   };
-  return colors[priority] || colors['Medium'];
+  return colors[priority] || colors["Medium"];
 };
 
 /**
@@ -39,26 +39,26 @@ export const getPriorityColor = (priority) => {
  */
 export const getColumnInfo = (column) => {
   const columnInfo = {
-    'todo': {
-      name: 'To Do',
-      color: 'bg-gray-100',
-      textColor: 'text-gray-700',
-      borderColor: 'border-gray-300',
+    todo: {
+      name: "To Do",
+      color: "bg-gray-100",
+      textColor: "text-gray-700",
+      borderColor: "border-gray-300",
     },
-    'inProgress': {
-      name: 'In Progress',
-      color: 'bg-blue-100',
-      textColor: 'text-blue-700',
-      borderColor: 'border-blue-300',
+    inProgress: {
+      name: "In Progress",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
+      borderColor: "border-blue-300",
     },
-    'done': {
-      name: 'Done',
-      color: 'bg-green-100',
-      textColor: 'text-green-700',
-      borderColor: 'border-green-300',
+    done: {
+      name: "Done",
+      color: "bg-green-100",
+      textColor: "text-green-700",
+      borderColor: "border-green-300",
     },
   };
-  return columnInfo[column] || columnInfo['todo'];
+  return columnInfo[column] || columnInfo["todo"];
 };
 
 /**
@@ -69,7 +69,7 @@ export const getColumnInfo = (column) => {
  */
 export const truncateText = (text, maxLength = 50) => {
   if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
+  return text.substring(0, maxLength) + "...";
 };
 
 /**
@@ -80,21 +80,21 @@ export const truncateText = (text, maxLength = 50) => {
 export const validateTask = (taskData) => {
   const errors = [];
 
-  if (!taskData.title || taskData.title.trim() === '') {
-    errors.push('Title is required');
+  if (!taskData.title || taskData.title.trim() === "") {
+    errors.push("Title is required");
   }
 
   if (taskData.title && taskData.title.length > 100) {
-    errors.push('Title must be less than 100 characters');
+    errors.push("Title must be less than 100 characters");
   }
 
   if (taskData.description && taskData.description.length > 500) {
-    errors.push('Description must be less than 500 characters');
+    errors.push("Description must be less than 500 characters");
   }
 
-  const validPriorities = ['Low', 'Medium', 'High'];
+  const validPriorities = ["Low", "Medium", "High"];
   if (taskData.priority && !validPriorities.includes(taskData.priority)) {
-    errors.push('Invalid priority level');
+    errors.push("Invalid priority level");
   }
 
   return {
@@ -110,20 +110,20 @@ export const validateTask = (taskData) => {
  * @param {string} order - Sort order (asc, desc)
  * @returns {array} Sorted tasks
  */
-export const sortTasks = (tasks, sortBy = 'createdAt', order = 'desc') => {
+export const sortTasks = (tasks, sortBy = "createdAt", order = "desc") => {
   const sorted = [...tasks];
 
   sorted.sort((a, b) => {
     let aVal = a[sortBy];
     let bVal = b[sortBy];
 
-    if (sortBy === 'priority') {
-      const priorityOrder = { 'High': 3, 'Medium': 2, 'Low': 1 };
+    if (sortBy === "priority") {
+      const priorityOrder = { High: 3, Medium: 2, Low: 1 };
       aVal = priorityOrder[aVal] || 0;
       bVal = priorityOrder[bVal] || 0;
     }
 
-    if (order === 'asc') {
+    if (order === "asc") {
       return aVal > bVal ? 1 : -1;
     } else {
       return aVal < bVal ? 1 : -1;

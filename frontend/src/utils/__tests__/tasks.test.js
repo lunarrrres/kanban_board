@@ -34,7 +34,7 @@ const makeTask = (overrides = {}) => ({
 describe("formatDate", () => {
   test("1. повертає дату у форматі DD.MM.YYYY з ISO-рядка", () => {
     expect(formatDate("2024-01-15T10:00:00.000Z")).toMatch(
-      /^\d{2}\.\d{2}\.\d{4}$/,
+      /^\d{2}\.\d{2}\.\d{4}$/
     );
   });
 
@@ -174,14 +174,14 @@ describe("validateTask", () => {
   test("19. валідне завдання повертає порожній масив помилок", () => {
     expect(
       validateTask(
-        makeTask({ title: "Valid task", priority: "high", column: "todo" }),
-      ),
+        makeTask({ title: "Valid task", priority: "high", column: "todo" })
+      )
     ).toEqual([]);
   });
 
   test("20. повертає помилку при відсутньому заголовку", () => {
     expect(validateTask(makeTask({ title: "" }))).toContain(
-      "Title is required",
+      "Title is required"
     );
   });
 

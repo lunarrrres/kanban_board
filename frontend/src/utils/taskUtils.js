@@ -46,7 +46,7 @@ export function getPriorityWeight(priority) {
  */
 export function sortByPriority(tasks) {
   return [...tasks].sort(
-    (a, b) => getPriorityWeight(b.priority) - getPriorityWeight(a.priority),
+    (a, b) => getPriorityWeight(b.priority) - getPriorityWeight(a.priority)
   );
 }
 
@@ -101,7 +101,7 @@ export function getBoardStats(tasks) {
       if (acc[task.column] !== undefined) acc[task.column]++;
       return acc;
     },
-    { todo: 0, inProgress: 0, done: 0 },
+    { todo: 0, inProgress: 0, done: 0 }
   );
 }
 

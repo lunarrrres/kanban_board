@@ -3,8 +3,8 @@
  * Centralizes all state management
  */
 
-import { configureStore } from '@reduxjs/toolkit';
-import taskReducer from './slices/taskSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import taskReducer from "./slices/taskSlice";
 
 const store = configureStore({
   reducer: {

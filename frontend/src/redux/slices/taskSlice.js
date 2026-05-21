@@ -4,10 +4,10 @@
  * Centralized state management following Redux Toolkit best practices
  */
 
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 /**
  * Async Thunks - Handle API calls
@@ -15,82 +15,92 @@ const API_BASE = 'http://localhost:5000/api';
 
 // Fetch all tasks
 export const fetchTasks = createAsyncThunk(
-  'tasks/fetchTasks',
+  "tasks/fetchTasks",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_BASE}/tasks`);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to fetch tasks');
+      return rejectWithValue(
+        error.response?.data?.error || "Failed to fetch tasks"
+      );
     }
   }
 );
 
 // Fetch tasks with filters
 export const fetchTasksFiltered = createAsyncThunk(
-  'tasks/fetchTasksFiltered',
+  "tasks/fetchTasksFiltered",
   async ({ column, priority }, { rejectWithValue }) => {
     try {
       const params = new URLSearchParams();
-      if (column) params.append('column', column);
-      if (priority) params.append('priority', priority);
+      if (column) params.append("column", column);
+      if (priority) params.append("priority", priority);
 
       const response = await axios.get(`${API_BASE}/tasks?${params}`);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to fetch tasks');
+      return rejectWithValue(
+        error.response?.data?.error || "Failed to fetch tasks"
+      );
     }
   }
 );
 
 // Search tasks by query
 export const searchTasks = createAsyncThunk(
-  'tasks/searchTasks',
+  "tasks/searchTasks",
   async (query, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_BASE}/tasks?q=${query}`);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Search failed');
+      return rejectWithValue(error.response?.data?.error || "Search failed");
     }
   }
 );
 
 // Create new task
 export const createTask = createAsyncThunk(
-  'tasks/createTask',
+  "tasks/createTask",
   async (taskData, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${API_BASE}/tasks`, taskData);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to create task');
+      return rejectWithValue(
+        error.response?.data?.error || "Failed to create task"
+      );
     }
   }
 );
 
 // Update task
 export const updateTask = createAsyncThunk(
-  'tasks/updateTask',
+  "tasks/updateTask",
   async ({ id, updates }, { rejectWithValue }) => {
     try {
       const response = await axios.patch(`${API_BASE}/tasks/${id}`, updates);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to update task');
+      return rejectWithValue(
+        error.response?.data?.error || "Failed to update task"
+      );
     }
   }
 );
 
 // Delete task
 export const deleteTask = createAsyncThunk(
-  'tasks/deleteTask',
+  "tasks/deleteTask",
   async (id, { rejectWithValue }) => {
     try {
       await axios.delete(`${API_BASE}/tasks/${id}`);
       return id;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to delete task');
+      return rejectWithValue(
+        error.response?.data?.error || "Failed to delete task"
+      );
     }
   }
 );
@@ -99,19 +109,19 @@ export const deleteTask = createAsyncThunk(
  * Redux Slice Definition
  */
 const taskSlice = createSlice({
-  name: 'tasks',
+  name: "tasks",
   initialState: {
     // Task data organized by column
-    columnOrder: ['todo', 'inProgress', 'done'],
+    columnOrder: ["todo", "inProgress", "done"],
     tasks: {
-      'todo': [],
-      'inProgress': [],
-      'done': []
+      todo: [],
+      inProgress: [],
+      done: [],
     },
     // Filter and search state
     filters: {
       priority: null,
-      searchQuery: ''
+      searchQuery: "",
     },
     // UI state
     loading: false,
@@ -128,7 +138,9 @@ const taskSlice = createSlice({
       const { taskId, sourceColumn, destinationColumn } = action.payload;
 
       // Find and remove task from source column
-      const taskIndex = state.tasks[sourceColumn].findIndex(t => t.id === taskId);
+      const taskIndex = state.tasks[sourceColumn].findIndex(
+        (t) => t.id === taskId
+      );
       if (taskIndex === -1) return;
 
       const [movedTask] = state.tasks[sourceColumn].splice(taskIndex, 1);
@@ -164,7 +176,7 @@ const taskSlice = createSlice({
      */
     clearFilters: (state) => {
       state.filters.priority = null;
-      state.filters.searchQuery = '';
+      state.filters.searchQuery = "";
     },
 
     /**
@@ -194,11 +206,11 @@ const taskSlice = createSlice({
       state.loading = false;
       // Organize tasks by column
       const organized = {
-        'todo': [],
-        'inProgress': [],
-        'done': []
+        todo: [],
+        inProgress: [],
+        done: [],
       };
-      action.payload.forEach(task => {
+      action.payload.forEach((task) => {
         if (organized[task.column]) {
           organized[task.column].push(task);
         }
@@ -220,11 +232,11 @@ const taskSlice = createSlice({
     builder.addCase(fetchTasksFiltered.fulfilled, (state, action) => {
       state.loading = false;
       const organized = {
-        'todo': [],
-        'inProgress': [],
-        'done': []
+        todo: [],
+        inProgress: [],
+        done: [],
       };
-      action.payload.forEach(task => {
+      action.payload.forEach((task) => {
         if (organized[task.column]) {
           organized[task.column].push(task);
         }
@@ -246,11 +258,11 @@ const taskSlice = createSlice({
     builder.addCase(searchTasks.fulfilled, (state, action) => {
       state.loading = false;
       const organized = {
-        'todo': [],
-        'inProgress': [],
-        'done': []
+        todo: [],
+        inProgress: [],
+        done: [],
       };
-      action.payload.forEach(task => {
+      action.payload.forEach((task) => {
         if (organized[task.column]) {
           organized[task.column].push(task);
         }
@@ -287,8 +299,10 @@ const taskSlice = createSlice({
     builder.addCase(updateTask.fulfilled, (state, action) => {
       const updatedTask = action.payload;
       // Find and update the task in its column
-      state.columnOrder.forEach(column => {
-        const taskIndex = state.tasks[column].findIndex(t => t.id === updatedTask.id);
+      state.columnOrder.forEach((column) => {
+        const taskIndex = state.tasks[column].findIndex(
+          (t) => t.id === updatedTask.id
+        );
         if (taskIndex !== -1) {
           state.tasks[column][taskIndex] = updatedTask;
         }
@@ -307,15 +321,17 @@ const taskSlice = createSlice({
     builder.addCase(deleteTask.fulfilled, (state, action) => {
       const taskId = action.payload;
       // Remove task from all columns
-      state.columnOrder.forEach(column => {
-        state.tasks[column] = state.tasks[column].filter(t => t.id !== taskId);
+      state.columnOrder.forEach((column) => {
+        state.tasks[column] = state.tasks[column].filter(
+          (t) => t.id !== taskId
+        );
       });
     });
 
     builder.addCase(deleteTask.rejected, (state, action) => {
       state.error = action.payload;
     });
-  }
+  },
 });
 
 // Export actions
@@ -332,7 +348,7 @@ export const {
 // Selectors for easy state access
 export const selectAllTasks = (state) => {
   const allTasks = [];
-  state.tasks.columnOrder.forEach(column => {
+  state.tasks.columnOrder.forEach((column) => {
     allTasks.push(...state.tasks.tasks[column]);
   });
   return allTasks;
