@@ -81,7 +81,7 @@ const Board = () => {
         taskId,
         sourceColumn,
         destinationColumn: destColumn,
-      }),
+      })
     );
 
     // Синхронізація з бекендом
