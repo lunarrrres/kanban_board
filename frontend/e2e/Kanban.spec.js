@@ -35,32 +35,37 @@ test.describe("Додавання завдання", () => {
   test("користувач може додати нове завдання через форму", async ({ page }) => {
     await page.goto("/");
 
-    // Натискаємо кнопку "Нове завдання" (Board.jsx)
-    await page.getByRole("button", { name: "+ Додати завдання" }).click();
+    // Listen for API responses to debug
+    const responsePromise = page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/tasks") && response.status() === 201
+    );
 
-    // Чекаємо поки модалка відкриється (h2 у TaskForm.jsx)
+    await page.getByRole("button", { name: "+ Додати завдання" }).click();
     await expect(
       page.getByRole("heading", { name: "Нове завдання" })
     ).toBeVisible();
 
-    // Генеруємо унікальну назву щоб уникнути дублів від попередніх запусків
     const uniqueTitle = `E2E завдання ${Date.now()}`;
-
-    // Заповнюємо форму (placeholders з TaskForm.jsx)
     await page.getByPlaceholder("Введіть назву завдання").fill(uniqueTitle);
     await page
       .getByPlaceholder("Додайте деталі завдання...")
       .fill("Опис тестового завдання");
 
-    // Натискаємо "Зберегти"
     await page.getByRole("button", { name: "Зберегти" }).click();
 
-    // Чекаємо закриття модалки
+    try {
+      await responsePromise;
+    } catch (e) {
+      console.error("API call failed or timed out:", e);
+    }
+
     await expect(
       page.getByRole("heading", { name: "Нове завдання" })
     ).toBeHidden();
 
-    // Перевіряємо що завдання з'явилось на дошці з довшим таймаутом
+    await page.waitForTimeout(500);
+
     await expect(page.getByText(uniqueTitle)).toBeVisible({ timeout: 10000 });
   });
 });
