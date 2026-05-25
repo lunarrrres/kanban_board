@@ -43,5 +43,14 @@
     "column": "done",
     "createdAt": "2026-05-21T02:25:51.756Z",
     "updatedAt": "2026-05-21T03:15:33.549Z"
+  },
+  {
+    "id": "8d310f9c-6fdc-4015-9572-bf3ae68738e6",
+    "title": "E2E завдання 1779726539651",
+    "description": "Опис тестового завдання",
+    "priority": "Medium",
+    "column": "todo",
+    "createdAt": "2026-05-25T16:28:59.767Z",
+    "updatedAt": "2026-05-25T16:28:59.767Z"
   }
 ]
