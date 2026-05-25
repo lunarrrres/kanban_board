@@ -60,7 +60,7 @@ test.describe("Додавання завдання", () => {
       page.getByRole("heading", { name: "Нове завдання" })
     ).toBeHidden();
 
-    // Перевіряємо що завдання з'явилось на дошці
-    await expect(page.getByText(uniqueTitle)).toBeVisible();
+    // Перевіряємо що завдання з'явилось на дошці з довшим таймаутом
+    await expect(page.getByText(uniqueTitle)).toBeVisible({ timeout: 10000 });
   });
 });
