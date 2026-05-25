@@ -36,7 +36,7 @@ test.describe("Додавання завдання", () => {
     await page.goto("/");
 
     // Натискаємо кнопку "Нове завдання" (Board.jsx)
-    await page.getByRole("button", { name: "Нове завдання" }).click();
+    await page.getByRole("button", { name: "+ Додати завдання" }).click();
 
     // Чекаємо поки модалка відкриється (h2 у TaskForm.jsx)
     await expect(
