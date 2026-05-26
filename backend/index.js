@@ -3,7 +3,16 @@
  * Handles task management via REST API
  * Database: JSON file-based storage
  */
+import cors from "cors";
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://kanban-board-ashy-three.vercel.app/",
+    ],
+  }),
+);
 const express = require("express");
 const cors = require("cors");
 const taskRoutes = require("./src/routes/tasks");
