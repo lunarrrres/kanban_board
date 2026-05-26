@@ -4,10 +4,11 @@
  * Database: JSON file-based storage
  */
 
-const express = require('express');
-const cors = require('cors');
-const taskRoutes = require('./src/routes/tasks');
-const errorHandler = require('./src/middleware/errorHandler');
+const express = require("express");
+const cors = require("cors");
+const taskRoutes = require("./src/routes/tasks");
+const authRoutes = require("./src/routes/auth");
+const errorHandler = require("./src/middleware/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,11 +18,12 @@ app.use(cors());
 app.use(express.json());
 
 // ==================== ROUTES ====================
-app.use('/api/tasks', taskRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'Server is running', timestamp: new Date() });
+app.get("/api/health", (req, res) => {
+  res.json({ status: "Server is running", timestamp: new Date() });
 });
 
 // ==================== ERROR HANDLING ====================
@@ -29,7 +31,7 @@ app.use(errorHandler);
 
 // ==================== 404 HANDLER ====================
 app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+  res.status(404).json({ error: "Route not found" });
 });
 
 // ==================== SERVER START ====================
