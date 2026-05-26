@@ -3,9 +3,10 @@
  * Orchestrates all components and manages drag-and-drop functionality
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext } from "@hello-pangea/dnd";
+import posthog from "posthog-js";
 import Column from "../../components/Column";
 import TaskForm from "../tasks/TaskForm";
 import SearchBar from "../tasks/SearchBar";
@@ -43,11 +44,20 @@ const Board = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const hasTrackedBoardView = useRef(false);
 
   // Отримання змінних оточення з безпечними значеннями за замовчуванням
   const isProd = import.meta.env.PROD;
   const mode = isProd ? "PRODUCTION" : "DEVELOPMENT";
   const title = import.meta.env.VITE_APP_TITLE || "Kanban Board";
+  const totalTasks =
+    tasks.todo.length + tasks.inProgress.length + tasks.done.length;
+
+  const trackEvent = (eventName, properties = {}) => {
+    if (typeof posthog?.capture === "function") {
+      posthog.capture(eventName, properties);
+    }
+  };
 
   /**
    * Load tasks on component mount
@@ -55,6 +65,17 @@ const Board = () => {
   useEffect(() => {
     dispatch(fetchTasks());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (hasTrackedBoardView.current) return;
+
+    hasTrackedBoardView.current = true;
+    trackEvent("board_viewed", {
+      title,
+      mode,
+      task_count: totalTasks,
+    });
+  }, [mode, title, totalTasks]);
 
   /**
    * Handle drag and drop completion
@@ -95,9 +116,26 @@ const Board = () => {
     setIsFormOpen(true);
   };
 
-  const handleDeleteTask = (taskId) => {
-    if (window.confirm("Ви впевнені, що хочете видалити це завдання?")) {
-      deleteTask(taskId);
+  const handleDeleteTask = async (taskId) => {
+    if (!window.confirm("Ви впевнені, що хочете видалити це завдання?")) {
+      return;
+    }
+
+    const taskToDelete =
+      tasks.todo.find((task) => task.id === taskId) ||
+      tasks.inProgress.find((task) => task.id === taskId) ||
+      tasks.done.find((task) => task.id === taskId);
+
+    try {
+      await deleteTask(taskId);
+      trackEvent("task_deleted", {
+        task_id: taskId,
+        title: taskToDelete?.title || "",
+        priority: taskToDelete?.priority || "unknown",
+        column: taskToDelete?.column || "unknown",
+      });
+    } catch (err) {
+      console.error("Failed to delete task:", err);
     }
   };
 
@@ -111,8 +149,19 @@ const Board = () => {
     try {
       if (editingTask) {
         await updateTask(editingTask.id, formData);
+        trackEvent("task_updated", {
+          task_id: editingTask.id,
+          title: formData.title,
+          priority: formData.priority,
+          column: formData.column,
+        });
       } else {
         await createTask(formData);
+        trackEvent("task_created", {
+          title: formData.title,
+          priority: formData.priority,
+          column: formData.column,
+        });
       }
       setIsFormOpen(false);
       setEditingTask(null);
