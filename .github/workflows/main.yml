@@ -55,6 +55,11 @@ jobs:
           cd frontend
           npm ci
 
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          npm ci
+
       - name: Run ESLint & Prettier
         run: |
           cd frontend
@@ -72,6 +77,21 @@ jobs:
         run: |
           cd frontend
           npx playwright install --with-deps
+
+      - name: Start Backend Server
+        run: |
+          cd backend
+          nohup npm start >/tmp/kanban-backend.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:5000/api/health >/dev/null; then
+              echo "Backend is ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Backend failed to start"
+          cat /tmp/kanban-backend.log
+          exit 1
 
       - name: Run E2E Tests (Playwright)
         run: |

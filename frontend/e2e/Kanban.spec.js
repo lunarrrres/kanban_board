@@ -38,7 +38,8 @@ test.describe("Додавання завдання", () => {
     // Listen for API responses to debug
     const responsePromise = page.waitForResponse(
       (response) =>
-        response.url().includes("/api/tasks") && response.status() === 201
+        response.url().includes("/api/tasks") && response.status() === 201,
+      { timeout: 60000 }
     );
 
     await page.getByRole("button", { name: "+ Додати завдання" }).click();

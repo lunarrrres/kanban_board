@@ -52,5 +52,23 @@
     "column": "todo",
     "createdAt": "2026-05-25T16:28:59.767Z",
     "updatedAt": "2026-05-25T16:28:59.767Z"
+  },
+  {
+    "id": "510ce0dc-f598-4047-b2f7-6ba5260dcd86",
+    "title": "E2E завдання 1779727358552",
+    "description": "Опис тестового завдання",
+    "priority": "Medium",
+    "column": "todo",
+    "createdAt": "2026-05-25T16:42:38.655Z",
+    "updatedAt": "2026-05-25T16:42:38.655Z"
+  },
+  {
+    "id": "278a38bc-e7cf-4985-a6f3-a373ac1b060a",
+    "title": "E2E завдання 1779754903235",
+    "description": "Опис тестового завдання",
+    "priority": "Medium",
+    "column": "todo",
+    "createdAt": "2026-05-26T00:21:43.366Z",
+    "updatedAt": "2026-05-26T00:21:43.366Z"
   }
 ]
