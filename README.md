@@ -1,6 +1,6 @@
 # Kanban Board 
 
-[![UniDone CI/CD Pipeline](https://github.com/lunarrrres/kanban_board/actions/workflows/main.yml/badge.svg)](https://github.com/lunarrrres/kanban_board/actions/workflows/main.yml)
+[![CI/CD Pipeline](https://github.com/lunarrrres/kanban_board/actions/workflows/main.yml/badge.svg)](https://github.com/lunarrrres/kanban_board/actions/workflows/main.yml)
 
 Повнофункціональний Kanban-додаток у стилі Trello з підтримкою drag-and-drop, пошуку та фільтрації завдань. Картки можна переміщувати між колонками, додавати, редагувати та видаляти. Кожна картка має заголовок, опис, пріоритет і дату створення.
 
