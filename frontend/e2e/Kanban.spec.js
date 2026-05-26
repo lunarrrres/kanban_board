@@ -7,15 +7,43 @@
 
 import { test, expect } from "@playwright/test";
 
+async function signInWithFreshUser(page) {
+  const email = `e2e-${Date.now()}@example.com`;
+  const password = "Password123!";
+
+  await page.addInitScript(() => {
+    window.localStorage.removeItem("kanban_auth_token");
+    window.localStorage.removeItem("kanban_user");
+  });
+
+  const registerResponse = await page.request.post(
+    "http://localhost:5000/api/auth/register",
+    {
+      data: {
+        name: "E2E User",
+        email,
+        password,
+      },
+    }
+  );
+
+  expect(registerResponse.ok()).toBeTruthy();
+
+  await page.goto("/");
+
+  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Пароль").fill(password);
+  await page.getByRole("button", { name: "Увійти" }).click();
+
+  await expect(page.getByRole("heading", { name: "Kanban Board" })).toBeVisible(
+    { timeout: 10000 }
+  );
+}
+
 // ── Сценарій 1: Головна сторінка ─────────────────────────────
 test.describe("Головна сторінка", () => {
   test("відкривається і відображає три колонки дошки", async ({ page }) => {
-    await page.goto("/");
-
-    // Перевіряємо заголовок дошки
-    await expect(
-      page.getByRole("heading", { name: "Kanban Board" })
-    ).toBeVisible();
+    await signInWithFreshUser(page);
 
     // Перевіряємо колонки через heading — уникаємо дублів у статистиці внизу
     await expect(
@@ -33,7 +61,7 @@ test.describe("Головна сторінка", () => {
 // ── Сценарій 2: Додавання завдання ───────────────────────────
 test.describe("Додавання завдання", () => {
   test("користувач може додати нове завдання через форму", async ({ page }) => {
-    await page.goto("/");
+    await signInWithFreshUser(page);
 
     // Listen for API responses to debug
     const responsePromise = page.waitForResponse(

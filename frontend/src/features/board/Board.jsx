@@ -24,7 +24,7 @@ import {
   useDeleteTask,
 } from "../../hooks/useTasks";
 
-const Board = () => {
+const Board = ({ user, onLogout }) => {
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
@@ -184,6 +184,10 @@ const Board = () => {
     dispatch(fetchTasks());
   };
 
+  const throwError = () => {
+    throw new Error("This is a test error");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -205,18 +209,31 @@ const Board = () => {
                   [{mode} MODE]
                 </span>
               </div>
-              {/* <p className="text-gray-500 font-medium">
-                Професійне управління вашими завданнями
-              </p> */}
+              <p className="text-sm text-gray-600">
+                Користувач: {user?.name || "Гість"}
+              </p>
             </div>
 
-            <button
-              onClick={handleAddNewTask}
-              disabled={loading}
-              className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all active:scale-95 disabled:opacity-50"
-            >
-              + Додати завдання
-            </button>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={handleAddNewTask}
+                disabled={loading}
+                className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all active:scale-95 disabled:opacity-50"
+              >
+                + Додати завдання
+              </button>
+              {typeof onLogout === "function" && (
+                <button
+                  onClick={onLogout}
+                  className="px-6 py-3 bg-white text-gray-700 font-bold rounded-xl border border-gray-200 hover:bg-gray-50 shadow-sm transition"
+                >
+                  Вийти
+                </button>
+              )}
+              <button onClick={throwError} disabled={loading}>
+                Викликати помилку
+              </button>
+            </div>
           </div>
         </div>
 
