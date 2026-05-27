@@ -8,7 +8,7 @@ import axios from "axios";
 import posthog from "posthog-js";
 import Board from "../board/Board";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
 const AUTH_TOKEN_KEY = "kanban_auth_token";
 const AUTH_USER_KEY = "kanban_user";
 

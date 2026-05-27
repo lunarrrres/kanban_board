@@ -10,34 +10,28 @@ import { test, expect } from "@playwright/test";
 async function signInWithFreshUser(page) {
   const email = `e2e-${Date.now()}@example.com`;
   const password = "Password123!";
+  const name = "E2E User";
 
   await page.addInitScript(() => {
     window.localStorage.removeItem("kanban_auth_token");
     window.localStorage.removeItem("kanban_user");
   });
 
-  const registerResponse = await page.request.post(
-    "http://localhost:5000/api/auth/register",
-    {
-      data: {
-        name: "E2E User",
-        email,
-        password,
-      },
-    }
-  );
-
-  expect(registerResponse.ok()).toBeTruthy();
-
   await page.goto("/");
-
+  
+  // Switch to registration mode
+  await page.getByRole("button", { name: "Реєстрація" }).click();
+  
+  await page.getByLabel("Ім’я").fill(name);
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Пароль").fill(password);
-  await page.getByRole("button", { name: "Увійти" }).click();
+  await page.getByRole("button", { name: "Зареєструватися" }).click();
 
-  await expect(page.getByRole("heading", { name: "Kanban Board" })).toBeVisible(
-    { timeout: 10000 }
-  );
+  // Board should load automatically after registration
+  await page.waitForURL("**/");
+  await expect(page.getByRole("heading", { name: "Kanban Board" })).toBeVisible({
+    timeout: 10000,
+  });
 }
 
 // ── Сценарій 1: Головна сторінка ─────────────────────────────
