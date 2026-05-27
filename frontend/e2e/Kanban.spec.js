@@ -18,10 +18,10 @@ async function signInWithFreshUser(page) {
   });
 
   await page.goto("/");
-  
+
   // Switch to registration mode
   await page.getByRole("button", { name: "Реєстрація" }).click();
-  
+
   await page.getByLabel("Ім’я").fill(name);
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Пароль").fill(password);
@@ -29,9 +29,11 @@ async function signInWithFreshUser(page) {
 
   // Board should load automatically after registration
   await page.waitForURL("**/");
-  await expect(page.getByRole("heading", { name: "Kanban Board" })).toBeVisible({
-    timeout: 10000,
-  });
+  await expect(page.getByRole("heading", { name: "Kanban Board" })).toBeVisible(
+    {
+      timeout: 10000,
+    }
+  );
 }
 
 // ── Сценарій 1: Головна сторінка ─────────────────────────────
