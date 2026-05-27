@@ -106,5 +106,14 @@
     "column": "todo",
     "createdAt": "2026-05-26T03:53:42.999Z",
     "updatedAt": "2026-05-26T03:53:42.999Z"
+  },
+  {
+    "id": "d107b6ef-7da5-49cd-8d63-78e04642405a",
+    "title": "E2E завдання 1779913842929",
+    "description": "Опис тестового завдання",
+    "priority": "Medium",
+    "column": "todo",
+    "createdAt": "2026-05-27T20:30:43.034Z",
+    "updatedAt": "2026-05-27T20:30:43.034Z"
   }
 ]
