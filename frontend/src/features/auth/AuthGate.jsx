@@ -86,11 +86,6 @@ const AuthGate = () => {
 
         if (response.data?.user) {
           setUser(response.data.user);
-          Sentry.setUser({
-            id: response.data.user.id,
-            email: response.data.user.email,
-            name: response.data.user.name,
-          });
         } else {
           clearSession();
         }
@@ -114,8 +109,16 @@ const AuthGate = () => {
 
   useEffect(() => {
     if (!user) {
+      Sentry.setUser(null);
       return;
     }
+
+    // Identify user in Sentry
+    Sentry.setUser({
+      id: user.id,
+      email: user.email,
+      segment: "premium_user", // Приклад кастомного тегу для сегментації
+    });
 
     if (typeof posthog?.identify === "function") {
       posthog.identify(user.id, {
@@ -166,11 +169,6 @@ const AuthGate = () => {
 
       saveSession(token, user);
       setUser(user);
-      Sentry.setUser({
-        id: user.id,
-        email: user.email,
-        name: user.name,
-      });
       setPassword("");
       setName("");
     } catch (error) {
@@ -185,7 +183,6 @@ const AuthGate = () => {
   const handleLogout = () => {
     clearSession();
     setUser(null);
-    Sentry.setUser(null);
     setError("");
     setPassword("");
     setName("");

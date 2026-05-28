@@ -233,7 +233,11 @@ const Board = ({ user, onLogout }) => {
                   Вийти
                 </button>
               )}
-              <button onClick={throwError} disabled={loading}>
+              <button
+                onClick={throwError}
+                disabled={loading}
+                className="px-6 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 transition-all active:scale-95 disabled:opacity-50"
+              >
                 Викликати помилку
               </button>
             </div>
