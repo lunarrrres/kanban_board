@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext } from "@hello-pangea/dnd";
 import posthog from "posthog-js";
+import * as Sentry from "@sentry/react";
 import Column from "../../components/Column";
 import TaskForm from "../tasks/TaskForm";
 import SearchBar from "../tasks/SearchBar";
@@ -185,7 +186,9 @@ const Board = ({ user, onLogout }) => {
   };
 
   const throwError = () => {
-    throw new Error("This is a test error");
+    const error = new Error("Sentry manual test error");
+    Sentry.captureException(error);
+    throw error;
   };
 
   return (
