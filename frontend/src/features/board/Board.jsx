@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext } from "@hello-pangea/dnd";
 import posthog from "posthog-js";
+import * as Sentry from "@sentry/react";
 import Column from "../../components/Column";
 import TaskForm from "../tasks/TaskForm";
 import SearchBar from "../tasks/SearchBar";
@@ -185,7 +186,9 @@ const Board = ({ user, onLogout }) => {
   };
 
   const throwError = () => {
-    throw new Error("This is a test error");
+    const error = new Error("Sentry manual test error");
+    Sentry.captureException(error);
+    throw error;
   };
 
   return (
@@ -230,7 +233,11 @@ const Board = ({ user, onLogout }) => {
                   Вийти
                 </button>
               )}
-              <button onClick={throwError} disabled={loading}>
+              <button
+                onClick={throwError}
+                disabled={loading}
+                className="px-6 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 transition-all active:scale-95 disabled:opacity-50"
+              >
                 Викликати помилку
               </button>
             </div>

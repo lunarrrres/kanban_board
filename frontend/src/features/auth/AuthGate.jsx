@@ -6,6 +6,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import posthog from "posthog-js";
+import * as Sentry from "@sentry/react";
 import Board from "../board/Board";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
@@ -108,8 +109,16 @@ const AuthGate = () => {
 
   useEffect(() => {
     if (!user) {
+      Sentry.setUser(null);
       return;
     }
+
+    // Identify user in Sentry
+    Sentry.setUser({
+      id: user.id,
+      email: user.email,
+      segment: "premium_user", // Приклад кастомного тегу для сегментації
+    });
 
     if (typeof posthog?.identify === "function") {
       posthog.identify(user.id, {
