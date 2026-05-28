@@ -6,6 +6,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import posthog from "posthog-js";
+import * as Sentry from "@sentry/react";
 import Board from "../board/Board";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
@@ -85,6 +86,11 @@ const AuthGate = () => {
 
         if (response.data?.user) {
           setUser(response.data.user);
+          Sentry.setUser({
+            id: response.data.user.id,
+            email: response.data.user.email,
+            name: response.data.user.name,
+          });
         } else {
           clearSession();
         }
@@ -160,6 +166,11 @@ const AuthGate = () => {
 
       saveSession(token, user);
       setUser(user);
+      Sentry.setUser({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      });
       setPassword("");
       setName("");
     } catch (error) {
@@ -174,6 +185,7 @@ const AuthGate = () => {
   const handleLogout = () => {
     clearSession();
     setUser(null);
+    Sentry.setUser(null);
     setError("");
     setPassword("");
     setName("");
